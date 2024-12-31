@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+struct Product {
+    string name;
+    int code;
+    float price;
+    int stock;
+};
+
+void addProduct(vector<Product>& products) {
+    Product newProduct;
+    
+    cin.ignore(); 
+    
+    cout << "Masukkan Nama Produk: ";
+    getline(cin, newProduct.name);  
+    cout << "Masukkan Kode Produk: ";
+    cin >> newProduct.code;
+    cout << "Masukkan Harga Produk: ";
+    cin >> newProduct.price;
+    cout << "Masukkan Stok Produk: ";
+    cin >> newProduct.stock;
+    
+    products.push_back(newProduct);
+    cout << "Produk berhasil ditambahkan!" << endl;
+}
+
+void displayProducts(const vector<Product>& products) {
+    if (products.empty()) {
+        cout << "Tidak ada produk untuk ditampilkan." << endl;
+        return;
+    }
+
+    cout << "\nDaftar Produk di Pabrik:" << endl;
+    for (const auto& product : products) {
+        cout << "Nama: " << product.name
+             << ", Kode: " << product.code
+             << ", Harga: Rp " << product.price
+             << ", Stok: " << product.stock << endl;
+    }
+}
+
+int main() {
+    vector<Product> products;  
+    int choice;
+    
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. Tambah Produk\n";
+        cout << "2. Tampilkan Produk\n";
+        cout << "3. Keluar\n";
+        cout << "Pilih pilihan (1/2/3): ";
+        cin >> choice;
+        
+        switch (choice) {
+            case 1:
+                addProduct(products);  
+                break;
+            case 2:
+                displayProducts(products);  
+                break;
+            case 3:
+                cout << "Keluar dari program." << endl;
+                break;
+            default:
+                cout << "Pilihan tidak valid, coba lagi." << endl;
+        }
+    } while (choice != 3);
+    
+    return 0;
+}
