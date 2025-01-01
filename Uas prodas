@@ -1,74 +1,56 @@
 #include <iostream>
-#include <vector>
-#include <string>
+#include <fstream>
+#include <iomanip> // Untuk format angka
 using namespace std;
 
-struct Product {
-    string name;
-    int code;
-    float price;
-    int stock;
-};
+void buatKuitansi() {
+    string namaPembayar, keterangan, tanggal, penerima;
+    double nominal;
 
-void addProduct(vector<Product>& products) {
-    Product newProduct;
-    
-    cin.ignore(); 
-    
-    cout << "Masukkan Nama Produk: ";
-    getline(cin, newProduct.name);  
-    cout << "Masukkan Kode Produk: ";
-    cin >> newProduct.code;
-    cout << "Masukkan Harga Produk: ";
-    cin >> newProduct.price;
-    cout << "Masukkan Stok Produk: ";
-    cin >> newProduct.stock;
-    
-    products.push_back(newProduct);
-    cout << "Produk berhasil ditambahkan!" << endl;
-}
+    cout << "=== Program Kuitansi Pembayaran ===" << endl;
 
-void displayProducts(const vector<Product>& products) {
-    if (products.empty()) {
-        cout << "Tidak ada produk untuk ditampilkan." << endl;
-        return;
-    }
+    // Input data
+    cout << "Masukkan nama pembayar: ";
+    getline(cin, namaPembayar);
+    cout << "Masukkan nominal pembayaran (Rp): ";
+    cin >> nominal;
+    cin.ignore(); // Membersihkan buffer
+    cout << "Masukkan keterangan pembayaran: ";
+    getline(cin, keterangan);
+    cout << "Masukkan tanggal pembayaran (DD-MM-YYYY): ";
+    getline(cin, tanggal);
+    cout << "Masukkan nama penerima: ";
+    getline(cin, penerima);
 
-    cout << "\nDaftar Produk di Pabrik:" << endl;
-    for (const auto& product : products) {
-        cout << "Nama: " << product.name
-             << ", Kode: " << product.code
-             << ", Harga: Rp " << product.price
-             << ", Stok: " << product.stock << endl;
+    // Format kuitansi
+    string kuitansi = 
+        "=========================================\n"
+        "                    KUITANSI             \n"
+        "=========================================\n";
+    kuitansi += "Tanggal       : " + tanggal + "\n";
+    kuitansi += "Nama Pembayar : " + namaPembayar + "\n";
+    kuitansi += "Nominal       : Rp " + to_string(nominal) + "\n";
+    kuitansi += "Keterangan    : " + keterangan + "\n\n";
+    kuitansi += "Diterima oleh:\n";
+    kuitansi += penerima + "\n\n";
+    kuitansi += "=========================================\n";
+    kuitansi += "Terima kasih atas pembayaran Anda.\n";
+
+    // Tampilkan kuitansi
+    cout << "\n" << kuitansi;
+
+    // Simpan ke file
+    ofstream file("kuitansi.txt");
+    if (file.is_open()) {
+        file << kuitansi;
+        file.close();
+        cout << "Kuitansi telah disimpan ke 'kuitansi.txt'." << endl;
+    } else {
+        cerr << "Gagal menyimpan kuitansi ke file." << endl;
     }
 }
 
 int main() {
-    vector<Product> products;  
-    int choice;
-    
-    do {
-        cout << "\nMenu:\n";
-        cout << "1. Tambah Produk\n";
-        cout << "2. Tampilkan Produk\n";
-        cout << "3. Keluar\n";
-        cout << "Pilih pilihan (1/2/3): ";
-        cin >> choice;
-        
-        switch (choice) {
-            case 1:
-                addProduct(products);  
-                break;
-            case 2:
-                displayProducts(products);  
-                break;
-            case 3:
-                cout << "Keluar dari program." << endl;
-                break;
-            default:
-                cout << "Pilihan tidak valid, coba lagi." << endl;
-        }
-    } while (choice != 3);
-    
+    buatKuitansi();
     return 0;
 }
